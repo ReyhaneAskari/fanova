@@ -5,7 +5,10 @@ import warnings
 import pickle
 import re
 
+import matplotlib as mpl
+mpl.use('Agg')
 import matplotlib.pyplot as plt
+
 import itertools as it
 from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
@@ -278,7 +281,7 @@ class Visualizer(object):
                 std[i] = np.sqrt(v)
             return mean, std, grid
 
-    def plot_marginal(self, param, resolution=100, log_scale=None, show=True):
+    def plot_marginal(self, param, resolution=100, log_scale=None, show=False):
         """
         Creates a plot of marginal of a selected parameter
         
