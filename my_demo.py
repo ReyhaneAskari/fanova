@@ -9,8 +9,10 @@ import fanova.visualizer as viz
 import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
+from collections import defaultdict
 
-dataset_name = 'D'
+dataset_name = 'B.1'
+
 
 def plot_bars(importance_list):
     objects = []
@@ -36,17 +38,28 @@ y_results = []
 x_params = []
 x_param_names = []
 num_features = len(data[0]['params'])
+
+encoding = defaultdict(None)
+encoding.default_factory = encoding.__len__
+
 for i in range(len(data)):
-    x_params.append(
-        [data[i]['params'][j]['value'] for j in range(num_features)])
+    param = data[i]['params']
     x_param_names.append(
-        [data[i]['params'][j]['name'] for j in range(num_features)])
+        [param[j]['name'] for j in range(num_features)])
+    values = []
+    for j in range(num_features):
+        if param[j]['type'] == 'categorical':
+            values.append(encoding[param[j]['value']])
+        else:
+            values.append(param[j]['value'])
+    x_params.append(values)
     for result in data[i]['results']:
         if result['type'] == 'objective':
             y_results.append(result['value'])
+            # there is only one result with objective as type
+            break
 X_full = array(x_params)
 y_full = array(y_results)
-
 
 n_samples = len(data)
 
